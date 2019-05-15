@@ -1,0 +1,51 @@
+### Docker Version ####
+version: '3'
+
+### Container Service List #####
+services:
+
+### Web Application Server Nginx ####
+  web:
+    image: nginx:1.15.6
+    ports:
+      - "8080:80"
+
+    ### Dependency Service ####
+    depends_on:
+      - app
+    ### Host Mount Path ####
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./spajam:/var/www/html/spajam
+
+### PHP Setting ####
+  app:
+    build: ./php
+
+    ### Dependency Service ####
+    depends_on:
+      - mysql
+    ### Host Mount Path ####
+    volumes:
+      - ./spajam:/var/www/html/spajam
+
+### DataBase MySQL Setting ####
+  mysql:
+    image: mysql:5.7
+
+    ### ENV Settings ####
+    environment:
+      MYSQL_DATABASE: spajam
+      MYSQL_USER: root
+      MYSQL_PASSWORD: spajam
+      MYSQL_ROOT_PASSWORD: spajam
+    ports:
+      - "3306:3306"
+
+    ### Host Mount Path ####
+    volumes:
+      - mysql-data:/var/lib/mysql
+    
+### DB Data Mount ####
+volumes:
+  mysql-data:
