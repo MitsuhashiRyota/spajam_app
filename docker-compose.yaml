@@ -8,7 +8,7 @@ services:
   web:
     image: nginx:1.15.6
     ports:
-      - "8080:80"
+      - "80:80"
 
     ### Dependency Service ####
     depends_on:
